@@ -1,7 +1,11 @@
 # Bibliography about typings in TypeScript
 
-## Known libraries
+## Souces
 
+* [Typebox](https://github.com/sinclairzx81/typebox)
+* [Arktype](https://arktype.io)
+* [Nominal](https://github.com/scalarhq/nominal)
+* [Unlocking type-safety superpowers in Typescript with nominal and refinement types](https://zackoverflow.dev/writing/nominal-and-refinement-types-typescript)
 
 ## Code
 

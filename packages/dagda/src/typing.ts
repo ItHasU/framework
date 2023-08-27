@@ -13,19 +13,19 @@ type ValueOfNamed<NT> = NT extends { __value: infer V } ? V : never;
 type TypeOfNamed<NT> = NT extends { __type: infer T extends string } ? T : never;
 
 /** Cast a value to a [Strict]Named type */
-function asNamed<NT>(value: ValueOfNamed<NT>): NT {
+export function asNamed<NT>(value: ValueOfNamed<NT>): NT {
     return value as NT;
 }
 /** Convert a [Strict]Named type to its value type (V) */
-function asRaw<NT>(value: NT): ValueOfNamed<NT> {
+export function asRaw<NT>(value: NT): ValueOfNamed<NT> {
     return value as ValueOfNamed<NT>;
 }
 /** Convert a Named type to its Strict equivalent */
-function asStrict<NT>(named: NT): StrictNamed<TypeOfNamed<NT>, ValueOfNamed<NT>> {
+export function asStrict<NT>(named: NT): StrictNamed<TypeOfNamed<NT>, ValueOfNamed<NT>> {
     return named as unknown as StrictNamed<TypeOfNamed<NT>, ValueOfNamed<NT>>;
 }
 /** Convert a Strict Named type to it non strict equivalent */
-function asUnstricted<NT>(named: NT): Named<TypeOfNamed<NT>, ValueOfNamed<NT>> {
+export function asUnstricted<NT>(named: NT): Named<TypeOfNamed<NT>, ValueOfNamed<NT>> {
     return named as Named<TypeOfNamed<NT>, ValueOfNamed<NT>>;
 }
 
@@ -33,22 +33,26 @@ function asUnstricted<NT>(named: NT): Named<TypeOfNamed<NT>, ValueOfNamed<NT>> {
 
 
 export class NamedTyping<Name extends string, JSType> {
+    private _t: Named<Name, JSType>;
+
     constructor() { }
 }
 
 class String extends NamedTyping<"string", string> { }
 class Integer extends NamedTyping<"integer", number> { }
-class Boolean extends NamedTyping<"boolean", boolean> { }
+class Bool extends NamedTyping<"boolean", boolean> { }
+class Tmp { }
 
 const types = {
     string: String,
-    number: Number,
-    boolean: Boolean,
+    number: Integer,
+    boolean: Bool,
 };
 
 export type Static<T> = T extends NamedTyping<infer Name, infer JSType> ? Named<Name, JSType> : never;
 
-const t1 = new Boolean();
-type T1 = Static<Boolean>;
+const t1 = new Bool();
+type T1 = Static<Bool>;
+type T2 = Static<Tmp>;
 
-const a: T1 = asNamed("test");
+const a: T1 = asNamed(true);
