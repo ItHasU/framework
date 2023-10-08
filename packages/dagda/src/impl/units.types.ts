@@ -1,5 +1,5 @@
 import { JSNumber } from "./js.types";
-import { Static, asNamed } from "./typing";
+import { Static, asNamed } from "../types";
 
 export class LengthInMeters extends JSNumber<"LengthInMeters"> { }
 export class LengthInMilliMeters extends JSNumber<"LengthInMilliMeters"> { }

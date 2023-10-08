@@ -32,27 +32,32 @@ export function asUnstricted<NT>(named: NT): Named<TypeOfNamed<NT>, ValueOfNamed
 //#endregion
 
 
-export class NamedTyping<Name extends string, JSType> {
-    private _t: Named<Name, JSType>;
+export class NamedTyping<JSType> {
+    private _t: Named<JSType>;
 
     constructor() { }
 }
 
-class String extends NamedTyping<"string", string> { }
-class Integer extends NamedTyping<"integer", number> { }
-class Bool extends NamedTyping<"boolean", boolean> { }
-class Tmp { }
+class String extends NamedTyping<string> { }
+class Integer extends NamedTyping<number> { }
+class Bool extends NamedTyping<boolean> { }
+class Length extends NamedTyping<number>{ }
+class Tmp extends NamedTyping<{ length: Static<Length> }>{ }
 
-const types = {
+const APP_TYPES = {
     string: String,
     number: Integer,
     boolean: Bool,
 };
 
-export type Static<T> = T extends NamedTyping<infer Name, infer JSType> ? Named<Name, JSType> : never;
+export type Static<Types extends { [name: string]: unknown }, Name extends string> = Types[Name] extends NamedTyping<infer JSType> ? Named<Name, JSType> : never;
 
 const t1 = new Bool();
-type T1 = Static<Bool>;
+type T1 = Static<typeof APP_TYPES, "boolean">;
 type T2 = Static<Tmp>;
+type TLength = Static<Length>
 
 const a: T1 = asNamed(true);
+const b: T2 = asNamed({ length: asNamed<TLength>(12) });
+
+console.log(b.length);
